@@ -65,11 +65,8 @@ Content-Type: application/json
 
 ### Bonus Features (Optional)
 
-- Additional endpoints (batch processing, task history, etc.)
-- Request validation with detailed error messages
-- Rate limiting or caching
+- UI/UX for submitting tasks and viewing results
 - Unit tests
-- OpenAPI/Swagger documentation (FastAPI has this built-in!)
 
 ## What We're Looking For
 
