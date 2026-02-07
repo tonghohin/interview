@@ -3,6 +3,7 @@ import { generateText, Output } from "ai";
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
+import { z } from "zod";
 
 dotenv.config();
 
@@ -24,7 +25,8 @@ app.get("/", (_, res) => {
 
 app.post("/api/analyze-task", async (req, res) => {
     try {
-        const { task } = req.body;
+        const parsedBody = z.object({ task: z.string() }).parse(req.body);
+        const { task } = parsedBody;
 
         if (!task) {
             return res.status(400).json({
