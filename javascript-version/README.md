@@ -35,9 +35,9 @@ This monorepo is managed with **pnpm workspaces**:
 
 ## Getting Started
 
-### 1. Install Dependencies
+### 1. Navigate and Install Dependencies
 
-Run this from the root directory:
+First, ensure you are in the `javascript-version` directory, then install the dependencies from the root:
 
 ```bash
 pnpm install
