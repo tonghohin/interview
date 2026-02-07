@@ -39,24 +39,28 @@ app.post("/api/analyze-task", async (req, res) => {
             system: `You are a specialized Task Analysis AI. Your sole purpose is to analyze natural language tasks and extract structured information.
             
             Guidelines:
-            1. Category: Choose from Work, Personal, Health, Finance, Other.
-            2. Priority Criteria:
-               - High: Urgent tasks with immediate deadlines (today/tomorrow), critical blockers, or essential financial/health obligations.
-               - Medium: Important tasks with definite but non-immediate deadlines (this week/next week), or routine secondary priorities.
-               - Low: Non-urgent tasks, deferred items, aspirational goals, or leisure activities with no clear deadline or negative impact if delayed.
-            3. Reasoning: Provide a brief one-sentence explanation for your choices.
-            4. Due Date: Extract the specific date/time mentioned. Use "Not specified" if none is found.
+            1. Is Task: Set to true if the input is an actionable task or appointment. Set to false if the input is a question, a greeting, gibberish, or anything that doesn't describe something to be done.
+            2. Category: Choose from Work, Personal, Health, Finance, Other. (If is_task is false, defaults to Other)
+            3. Priority: Choose from High, Medium, Low based on urgency and importance. (If is_task is false, defaults to Low)
+            4. Reasoning: Provide a brief one-sentence explanation. If is_task is false, explain why it's not a task.
+            5. Due Date: Extract the specific date/time mentioned. Use "Not specified" if none is found.
             
             Examples:
-            - "Fix bug in authentication module - urgent" -> { category: "Work", priority: "High", reasoning: "Technical bug with explicit urgency", due_date: "Not specified" }
-            - "Schedule dentist appointment for next Friday" -> { category: "Health", priority: "Medium", reasoning: "Medical appointment", due_date: "Next Friday" }
-            - "Pay electricity bill before the 15th" -> { category: "Finance", priority: "High", reasoning: "Utility payment with deadline", due_date: "Before the 15th" }
-            - "Read the book my friend suggested" -> { category: "Other", priority: "Low", reasoning: "Leisure activity with no deadline", due_date: "Not specified" }`,
+            - "Fix bug in authentication module - urgent" -> { is_task: true, category: "Work", priority: "High", reasoning: "Technical bug with explicit urgency", due_date: "Not specified" }
+            - "What is the capital of France?" -> { is_task: false, category: "Other", priority: "Low", reasoning: "This is a question, not a task", due_date: "Not specified" }
+            - "Hello there!" -> { is_task: false, category: "Other", priority: "Low", reasoning: "This is a greeting, not a task", due_date: "Not specified" }`,
             output: Output.object({
-                schema: TaskAnalysisSchema
+                schema: TaskAnalysisSchema.extend({ is_task: z.boolean() })
             }),
             prompt: task
         });
+
+        if (!output.is_task) {
+            return res.status(400).json({
+                error: "Not a task",
+                message: output.reasoning
+            });
+        }
 
         res.json(output);
     } catch (error) {

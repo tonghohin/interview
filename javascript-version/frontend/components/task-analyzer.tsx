@@ -28,7 +28,10 @@ export function TaskAnalyzer() {
                 },
                 body: JSON.stringify({ task })
             });
-            if (!response.ok) throw new Error("Failed to analyze task");
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message || error.error || "Failed to analyze task");
+            }
             const data = await response.json();
             const taskAnalysis = TaskAnalysisSchema.parse(data);
             setResult(taskAnalysis);
