@@ -22,7 +22,7 @@ Once the backend was ready, I jumped straight into building the frontend. I star
 
 ### Future Improvements
 
-- **Task History & Persistence**: Connect a database (Supabase/Prisma) to save the analyzed tasks into a personal board.
+- **Task History & Persistence**: Connect a database to save the analyzed tasks into a personal board.
 - **Bulk Processing**: Add support for multi-line inputs so users can paste a whole list of tasks and get them all categorized at once.
 
 ## Project Structure
