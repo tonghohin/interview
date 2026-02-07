@@ -16,6 +16,7 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
+        "@smart-task/shared": "workspace:*",
         "ai": "^6.0.75",
         "cors": "^2.8.6",
         "dotenv": "^16.3.1",

@@ -1,3 +1,5 @@
+import { TaskAnalysisSchema } from "@smart-task/shared";
+import { generateText, Output } from "ai";
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
@@ -30,27 +32,27 @@ app.post("/api/analyze-task", async (req, res) => {
             });
         }
 
-        /**
-         * TODO: Implement your AI logic here
-         *
-         * Expected response format:
-         * {
-         *   category: "Work|Personal|Health|Finance|Other",
-         *   priority: "High|Medium|Low",
-         *   reasoning: "Brief explanation",
-         *   due_date: "Extracted date or 'Not specified'"
-         * }
-         */
+        const { output } = await generateText({
+            model: "openai/gpt-5-nano",
+            system: `You are a specialized Task Analysis AI. Your sole purpose is to analyze natural language tasks and extract structured information.
+            
+            Guidelines:
+            1. Category: Choose from Work, Personal, Health, Finance, Other.
+            2. Priority: Choose from High, Medium, Low based on urgency and importance.
+            3. Reasoning: Provide a brief one-sentence explanation for your choices.
+            4. Due Date: Extract the specific date/time mentioned. Use "Not specified" if none is found.
+            
+            Examples:
+            - "Fix bug in authentication module - urgent" -> { category: "Work", priority: "High", reasoning: "Technical bug with explicit urgency", due_date: "Not specified" }
+            - "Schedule dentist appointment for next Friday" -> { category: "Health", priority: "Medium", reasoning: "Medical appointment", due_date: "Next Friday" }
+            - "Pay electricity bill before the 15th" -> { category: "Finance", priority: "High", reasoning: "Utility payment with deadline", due_date: "Before the 15th" }`,
+            output: Output.object({
+                schema: TaskAnalysisSchema
+            }),
+            prompt: task
+        });
 
-        // Placeholder response - replace with your implementation
-        const result = {
-            category: "Work",
-            priority: "High",
-            reasoning: "This is a placeholder response. Implement AI logic to analyze the task.",
-            due_date: "Not specified"
-        };
-
-        res.json(result);
+        res.json(output);
     } catch (error) {
         console.error("Error analyzing task:", error);
         res.status(500).json({
