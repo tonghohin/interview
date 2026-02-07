@@ -40,14 +40,18 @@ app.post("/api/analyze-task", async (req, res) => {
             
             Guidelines:
             1. Category: Choose from Work, Personal, Health, Finance, Other.
-            2. Priority: Choose from High, Medium, Low based on urgency and importance.
+            2. Priority Criteria:
+               - High: Urgent tasks with immediate deadlines (today/tomorrow), critical blockers, or essential financial/health obligations.
+               - Medium: Important tasks with definite but non-immediate deadlines (this week/next week), or routine secondary priorities.
+               - Low: Non-urgent tasks, deferred items, aspirational goals, or leisure activities with no clear deadline or negative impact if delayed.
             3. Reasoning: Provide a brief one-sentence explanation for your choices.
             4. Due Date: Extract the specific date/time mentioned. Use "Not specified" if none is found.
             
             Examples:
             - "Fix bug in authentication module - urgent" -> { category: "Work", priority: "High", reasoning: "Technical bug with explicit urgency", due_date: "Not specified" }
             - "Schedule dentist appointment for next Friday" -> { category: "Health", priority: "Medium", reasoning: "Medical appointment", due_date: "Next Friday" }
-            - "Pay electricity bill before the 15th" -> { category: "Finance", priority: "High", reasoning: "Utility payment with deadline", due_date: "Before the 15th" }`,
+            - "Pay electricity bill before the 15th" -> { category: "Finance", priority: "High", reasoning: "Utility payment with deadline", due_date: "Before the 15th" }
+            - "Read the book my friend suggested" -> { category: "Other", priority: "Low", reasoning: "Leisure activity with no deadline", due_date: "Not specified" }`,
             output: Output.object({
                 schema: TaskAnalysisSchema
             }),
