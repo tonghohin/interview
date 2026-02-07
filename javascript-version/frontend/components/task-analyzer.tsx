@@ -14,7 +14,7 @@ export function TaskAnalyzer() {
 
     async function handleAnalyze(event: React.SubmitEvent) {
         event.preventDefault();
-        if (!task.trim()) return;
+        if (!task.trim() || isLoading) return;
 
         setIsLoading(true);
         setError(null);
@@ -48,7 +48,19 @@ export function TaskAnalyzer() {
                 <InputGroupAddon align="block-start" className="border-b">
                     <InputGroupText>Enter your task in natural language and let AI do the heavy lifting.</InputGroupText>
                 </InputGroupAddon>
-                <InputGroupTextarea placeholder="e.g., Fix authentication bug by Friday - urgent" className="min-h-20" value={task} onChange={(e) => setTask(e.target.value)} disabled={isLoading} />
+                <InputGroupTextarea
+                    placeholder="e.g., Fix authentication bug by Friday - urgent"
+                    className="min-h-20"
+                    value={task}
+                    onChange={(event) => setTask(event.target.value)}
+                    onKeyDown={(event) => {
+                        if (event.key === "Enter" && !event.shiftKey) {
+                            event.preventDefault();
+                            event.currentTarget.form?.requestSubmit();
+                        }
+                    }}
+                    disabled={isLoading}
+                />
                 <InputGroupAddon align="block-end">
                     {error && (
                         <InputGroupText className="text-destructive">
