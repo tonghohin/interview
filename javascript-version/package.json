@@ -4,6 +4,8 @@
     "scripts": {
         "dev": "pnpm -r --parallel dev",
         "build": "pnpm -r build",
+        "build:shared": "pnpm --filter @smart-task/shared build",
+        "predev": "pnpm build:shared",
         "start": "pnpm -r start"
     },
     "pnpm": {
